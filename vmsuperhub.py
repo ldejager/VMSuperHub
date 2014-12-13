@@ -7,13 +7,13 @@
 #
 # TODO: Cleanup code
 # TODO: Implement error handling around socket connects
-# TODO: Failback data storage to CSV for manual processing if required
 # TODO: Implement performance counters
 
 import time
 import struct
 import urllib2
 import socket
+import csv
 from daemon import runner
 from bs4 import BeautifulSoup
 
@@ -139,6 +139,17 @@ class SuperHub(object):
         sock.sendall(data_stream)
         sock.close()
 
+    @staticmethod
+    def __write_csv__(data_stream):
+        """
+        Write CSV file as fallback method for manual processing if required
+        """
+
+        with open('vm1min.csv', 'a') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(data_stream)
+
+    @staticmethod
     def run(self):
         """
         Main processing daemon
@@ -148,6 +159,7 @@ class SuperHub(object):
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
             SuperHub.__carbon_send__(data_stream)
+            SuperHub.__write_csv__(data_stream)
             time.sleep(SuperHub.INTERVAL)
 
 
@@ -157,5 +169,3 @@ if __name__ == '__main__':
 
     daemon_runner = runner.DaemonRunner(SuperHub)
     daemon_runner.do_action()
-
-
