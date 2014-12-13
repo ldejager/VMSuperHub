@@ -26,6 +26,7 @@ class SuperHub(object):
     CARBON_SERVER = '0.0.0.0'
     CARBON_PORT = 2003
     INTERVAL = 60
+    CARBON_PATH = 'virgin.modem.stats'
 
     def __init__(self):
         """
@@ -65,7 +66,7 @@ class SuperHub(object):
             ts = int(time.time())
 
             for (i, value) in enumerate(power_levels, start=1):
-                power_format = "virgin.modem.stats.us{0}_power {1} {2}".format(i, value, ts)
+                power_format = SuperHub.CARBON_PATH + ".us{0}_power {1} {2}".format(i, value, ts)
                 power_data.append(power_format)
 
             return power_data
@@ -93,7 +94,7 @@ class SuperHub(object):
         ts = int(time.time())
 
         for (i, value) in enumerate(power_levels, start=1):
-            power_format = "virgin.modem.stats.ds{0}_power {1} {2}".format(i, value, ts)
+            power_format = SuperHub.CARBON_PATH + ".ds{0}_power {1} {2}".format(i, value, ts)
             power_data.append(power_format)
 
         return power_data
@@ -116,18 +117,18 @@ class SuperHub(object):
         ts = int(time.time())
 
         for (i, value) in enumerate(snr_levels, start=1):
-            snr_format = "virgin.modem.stats.ds{0}_rx {1} {2}".format(i, value, ts)
+            snr_format = SuperHub.CARBON_PATH + ".ds{0}_rx {1} {2}".format(i, value, ts)
             snr_data.append(snr_format)
 
         return snr_data
 
-
+    @staticmethod
     def __carbon_send__(self, data_stream):
         """
         Send data to Carbon
         """
 
-        print 'sending data to carbon:\n%s' % data_stream
+        print 'Sending data to carbon:\n%s' % data_stream
         sock = socket.socket()
         sock.connect((SuperHub.CARBON_SERVER, SuperHub.CARBON_PORT))
         sock.sendall(data_stream)
