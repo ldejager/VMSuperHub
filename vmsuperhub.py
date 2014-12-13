@@ -4,10 +4,6 @@
 # This tools collects data and sends it to a carbon host for storage
 #
 # Leon de Jager <ldejager@coretanium.net>
-#
-# TODO: Cleanup code
-# TODO: Implement error handling around socket connects
-# TODO: Implement performance counters
 
 import time
 import struct
