@@ -27,6 +27,7 @@ class SuperHub(object):
     CARBON_PORT = 2003
     INTERVAL = 60
     CARBON_PATH = 'virgin.modem.stats'
+    CSV_FILE = 'vmstats.csv'
 
     def __init__(self):
         """
@@ -145,7 +146,7 @@ class SuperHub(object):
         Write CSV file as fallback method for manual processing if required
         """
 
-        with open('vm1min.csv', 'a') as csv_file:
+        with open(SuperHub.CSV_FILE, 'a') as csv_file:
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(data_stream)
 
