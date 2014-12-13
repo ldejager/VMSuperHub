@@ -150,7 +150,6 @@ class SuperHub(object):
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(data_stream)
 
-    @staticmethod
     def run(self):
         """
         Main processing daemon
