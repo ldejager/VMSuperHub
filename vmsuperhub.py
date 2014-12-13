@@ -1,9 +1,10 @@
 #!/usr/bin/python2.6
 #
-# Virgin Media SuperHub Statistics Gathering Tool
+# Virgin Media SuperHub signal and power levels monitoring tool
+# This tools collects data and sends it to a carbon host for storage
 #
+# Leon de Jager <ldejager@coretanium.net>
 
-import datetime
 import time
 import struct
 import urllib2
@@ -28,7 +29,7 @@ class SuperHub(object):
     def __get_gateway__(self):
         """
         Get default gateway by reading /proc/net/route
-        If running windows, adjust to your needs.
+        If running windows, replace with something that is appropriate for that environment.
         """
 
         with open("/proc/net/route") as fh:
