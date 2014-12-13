@@ -4,6 +4,12 @@
 # This tools collects data and sends it to a carbon host for storage
 #
 # Leon de Jager <ldejager@coretanium.net>
+#
+# TODO: Cleanup code
+# TODO: Implement error handling around socket connects
+# TODO: Failback data storage to CSV for manual processing if required
+# TODO: Daemonise script
+# TODO: Implement performance counters
 
 import time
 import struct
@@ -121,7 +127,7 @@ class SuperHub(object):
         Send data to Carbon
         """
 
-        print 'sending message:\n%s' % data_stream
+        print 'sending data to carbon:\n%s' % data_stream
         sock = socket.socket()
         sock.connect((SuperHub.CARBON_SERVER, SuperHub.CARBON_PORT))
         sock.sendall(data_stream)
