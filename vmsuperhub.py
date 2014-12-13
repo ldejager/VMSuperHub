@@ -81,52 +81,61 @@ class SuperHub(object):
 
             print "There was an error: %r" % e
 
-
     def __get_downstream_stats__(self):
         """
         Get downstream statistics (Downstream Power)
         """
 
-        url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
-        parse = BeautifulSoup(url.read())
+        try:
+            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
+            parse = BeautifulSoup(url.read())
 
-        power_label = parse.find(text="Power Level (dBmV)")
-        power_table = power_label.parent.parent
-        power = power_table.findAll('td')
-        power_levels = [power[1].text, power[2].text, power[3].text, power[4].text, power[5].text, power[6].text, power[7].text, power[8].text]
+            power_label = parse.find(text="Power Level (dBmV)")
+            power_table = power_label.parent.parent
+            power = power_table.findAll('td')
+            power_levels = [power[1].text, power[2].text, power[3].text, power[4].text, power[5].text, power[6].text, power[7].text, power[8].text]
 
-        power_data = []
+            power_data = []
 
-        ts = int(time.time())
+            ts = int(time.time())
 
-        for (i, value) in enumerate(power_levels, start=1):
-            power_format = SuperHub.CARBON_PATH + ".ds{0}_power {1} {2}".format(i, value, ts)
-            power_data.append(power_format)
+            for (i, value) in enumerate(power_levels, start=1):
+                power_format = SuperHub.CARBON_PATH + ".ds{0}_power {1} {2}".format(i, value, ts)
+                power_data.append(power_format)
 
-        return power_data
+            return power_data
+
+        except urllib2.URLError, e:
+
+            print "There was an error: %r" % e
 
     def __get_snr__(self):
         """
         Get modem SNR
         """
 
-        url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
-        parse = BeautifulSoup(url.read())
+        try:
+            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
+            parse = BeautifulSoup(url.read())
 
-        snr_label = parse.find(text="RxMER (dB)")
-        snr_table = snr_label.parent.parent
-        snr = snr_table.findAll('td')
-        snr_levels = [snr[1].text, snr[2].text, snr[3].text, snr[4].text, snr[5].text, snr[6].text, snr[7].text, snr[8].text]
+            snr_label = parse.find(text="RxMER (dB)")
+            snr_table = snr_label.parent.parent
+            snr = snr_table.findAll('td')
+            snr_levels = [snr[1].text, snr[2].text, snr[3].text, snr[4].text, snr[5].text, snr[6].text, snr[7].text, snr[8].text]
 
-        snr_data = []
+            snr_data = []
 
-        ts = int(time.time())
+            ts = int(time.time())
 
-        for (i, value) in enumerate(snr_levels, start=1):
-            snr_format = SuperHub.CARBON_PATH + ".ds{0}_rx {1} {2}".format(i, value, ts)
-            snr_data.append(snr_format)
+            for (i, value) in enumerate(snr_levels, start=1):
+                snr_format = SuperHub.CARBON_PATH + ".ds{0}_rx {1} {2}".format(i, value, ts)
+                snr_data.append(snr_format)
 
-        return snr_data
+            return snr_data
+
+        except urllib2.URLError, e:
+
+            print "There was an error: %r" % e
 
     @staticmethod
     def __carbon_send__(data_stream):
@@ -134,11 +143,15 @@ class SuperHub(object):
         Send data to Carbon
         """
 
-        print 'Sending data to carbon:\n%s' % data_stream
-        sock = socket.socket()
-        sock.connect((SuperHub.CARBON_SERVER, SuperHub.CARBON_PORT))
-        sock.sendall(data_stream)
-        sock.close()
+        try:
+            sock = socket.socket()
+            sock.connect((SuperHub.CARBON_SERVER, SuperHub.CARBON_PORT))
+            sock.sendall(data_stream)
+            sock.close()
+
+        except socket.error, e:
+
+            print "There was an error: %r" % e
 
     @staticmethod
     def __write_csv__(data_stream):
