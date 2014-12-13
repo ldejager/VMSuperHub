@@ -8,13 +8,13 @@
 # TODO: Cleanup code
 # TODO: Implement error handling around socket connects
 # TODO: Failback data storage to CSV for manual processing if required
-# TODO: Daemonise script
 # TODO: Implement performance counters
 
 import time
 import struct
 import urllib2
 import socket
+from daemon import runner
 from bs4 import BeautifulSoup
 
 
@@ -33,10 +33,15 @@ class SuperHub(object):
         Initializing
         """
 
+        self.stdin_path = '/dev/null'
+        self.stdout_path = '/dev/tty'
+        self.stderr_path = '/dev/tty'
+        self.pidfile_path = '/var/run/vmsuperhub.pid'
+        self.pidfile_timeout = 5
+
     def __get_gateway__(self):
         """
         Get default gateway by reading /proc/net/route
-        If running windows, replace with something that is appropriate for that environment.
         """
 
         with open("/proc/net/route") as fh:
@@ -123,7 +128,7 @@ class SuperHub(object):
         return snr_data
 
     @staticmethod
-    def __carbon_send__(self, data_stream):
+    def __carbon_send__(data_stream):
         """
         Send data to Carbon
         """
@@ -134,13 +139,23 @@ class SuperHub(object):
         sock.sendall(data_stream)
         sock.close()
 
+    def run(self):
+        """
+        Main processing daemon
+        """
+
+        while True:
+            data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
+            data_stream = '\n'.join(data) + '\n'
+            SuperHub.__carbon_send__(data_stream)
+            time.sleep(SuperHub.INTERVAL)
+
 
 if __name__ == '__main__':
 
     SuperHub = SuperHub()
 
-    while True:
-        data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
-        data_stream = '\n'.join(data) + '\n'
-        SuperHub.__carbon_send__(data_stream)
-        time.sleep(SuperHub.INTERVAL)
+    daemon_runner = runner.DaemonRunner(SuperHub)
+    daemon_runner.do_action()
+
+
