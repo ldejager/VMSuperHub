@@ -10,6 +10,7 @@ import struct
 import urllib2
 import socket
 import csv
+import os
 from daemon import runner
 from bs4 import BeautifulSoup
 
@@ -23,7 +24,7 @@ class SuperHub(object):
     CARBON_PORT = 2003
     INTERVAL = 60
     CARBON_PATH = 'virgin.modem.stats'
-    CSV_FILE = 'vmstats.csv'
+    CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
 
     def __init__(self):
         """
@@ -157,7 +158,7 @@ class SuperHub(object):
 
         with open(SuperHub.CSV_FILE, 'a') as csv_file:
             csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(data_stream)
+            csv_writer.writerow([data_stream])
 
     def run(self):
         """
