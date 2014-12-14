@@ -22,7 +22,7 @@ class SuperHub(object):
 
     CARBON_SERVER = '0.0.0.0'
     CARBON_PORT = 2003
-    INTERVAL = 300
+    INTERVAL = 60
     CARBON_PATH = 'virgin.modem.stats'
     CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
 
