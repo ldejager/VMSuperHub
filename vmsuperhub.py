@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 #
 # Virgin Media SuperHub signal and power levels monitoring tool
 # This tools collects data and sends it to a carbon host for storage
@@ -166,11 +166,14 @@ class SuperHub(object):
         """
 
         while True:
+            t0 = time.time()
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
             SuperHub.__carbon_send__(data_stream)
             SuperHub.__write_csv__(data_stream)
-            time.sleep(SuperHub.INTERVAL)
+            t1 = time.time()
+            time_taken = t1-t0
+            time.sleep(SuperHub.INTERVAL - time_taken)
 
 
 if __name__ == '__main__':
