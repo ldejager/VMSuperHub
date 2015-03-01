@@ -170,11 +170,15 @@ class SuperHub(object):
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
             SuperHub.__carbon_send__(data_stream)
+            print "Sending data to CARBON..."
             SuperHub.__write_csv__(data_stream)
+            print "Writing out data to CSV..."
             t1 = time.time()
             time_taken = t1-t0
+            print "Data collection took %s" % time_taken
             time.sleep(SuperHub.INTERVAL - time_taken)
-            print "Request took %s\n---" % time_taken
+            print "Sleeping...\n---\n\n"
+
 
 
 if __name__ == '__main__':
