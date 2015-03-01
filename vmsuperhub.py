@@ -35,6 +35,7 @@ class SuperHub(object):
         self.stderr_path = '/dev/tty'
         self.pidfile_path = '/var/run/vmsuperhub.pid'
         self.pidfile_timeout = 5
+        self.time = time.time()
 
     def __get_gateway__(self):
         """
@@ -165,14 +166,15 @@ class SuperHub(object):
         """
 
         while True:
-            print "---\nRunning..."
+            print "---\n%s\n---" % SuperHub.time
+            print "Collecting data..."
             t0 = time.time()
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
             SuperHub.__carbon_send__(data_stream)
             print "Sending data to CARBON..."
             SuperHub.__write_csv__(data_stream)
-            print "Writing out data to CSV..."
+            print "Writing data to CSV..."
             t1 = time.time()
             time_taken = t1-t0
             time_sleep = SuperHub.INTERVAL - time_taken
