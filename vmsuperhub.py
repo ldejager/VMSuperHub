@@ -166,7 +166,7 @@ class SuperHub(object):
         """
 
         while True:
-            print "---\n%s\n---" % SuperHub.time
+            print "---\n%s" % SuperHub.time
             print "Collecting data..."
             t0 = time.time()
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
