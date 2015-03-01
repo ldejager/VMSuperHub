@@ -9,3 +9,8 @@ The script will grab power levels and SNR information from your Virgin Media Sup
 as a carbon (graphite) instance from which you can create graphs.
 
 The process can be monitored using supervisor and the relevant configuration file is also attached to the project.
+
+```
+root@graphite:/opt/scripts/VMSuperHub# supervisorctl
+vmsuperhub                       RUNNING    pid 14914, uptime 0:00:12
+```
