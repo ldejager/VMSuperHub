@@ -175,8 +175,9 @@ class SuperHub(object):
             print "Writing out data to CSV..."
             t1 = time.time()
             time_taken = t1-t0
+            time_sleep = SuperHub.INTERVAL - time_taken
             print "Data collection took %s" % time_taken
-            print "Sleeping for " + SuperHub.INTERVAL - time_taken + "...\n---\n\n"
+            print "Sleeping for %s...\n---\n\n" % time_sleep
             time.sleep(SuperHub.INTERVAL - time_taken)
 
 
