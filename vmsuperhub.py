@@ -11,7 +11,6 @@ import urllib2
 import socket
 import csv
 import os
-from daemon import runner
 from bs4 import BeautifulSoup
 
 
@@ -180,5 +179,4 @@ if __name__ == '__main__':
 
     SuperHub = SuperHub()
 
-    daemon_runner = runner.DaemonRunner(SuperHub)
-    daemon_runner.do_action()
+    SuperHub.run()
