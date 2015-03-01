@@ -165,6 +165,7 @@ class SuperHub(object):
         """
 
         while True:
+            print "Running"
             t0 = time.time()
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
@@ -173,6 +174,7 @@ class SuperHub(object):
             t1 = time.time()
             time_taken = t1-t0
             time.sleep(SuperHub.INTERVAL - time_taken)
+            print "Previous request took %s" % time_taken
 
 
 if __name__ == '__main__':
