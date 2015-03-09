@@ -99,6 +99,13 @@ class SuperHub(object):
             power = power_table.findAll('td')
             power_levels = [power[1].text, power[2].text, power[3].text, power[4].text, power[5].text, power[6].text, power[7].text, power[8].text]
 
+            for idx, level in enumerate(power_levels):
+                if 'N/A' in level:
+                    level = '%.2f' % float(0.00)
+                    power_levels[idx] = level
+                else:
+                    power_levels[idx] = level
+
             power_data = []
 
             ts = int(time.time())
@@ -126,6 +133,13 @@ class SuperHub(object):
             snr_table = snr_label.parent.parent
             snr = snr_table.findAll('td')
             snr_levels = [snr[1].text, snr[2].text, snr[3].text, snr[4].text, snr[5].text, snr[6].text, snr[7].text, snr[8].text]
+
+            for idx, level in enumerate(snr_levels):
+                if 'N/A' in level:
+                    level = '%.2f' % float(0.00)
+                    snr_levels[idx] = level
+                else:
+                    snr_levels[idx] = level
 
             snr_data = []
 
