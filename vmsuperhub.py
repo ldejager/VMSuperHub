@@ -24,6 +24,7 @@ class SuperHub(object):
     INTERVAL = 60
     CARBON_PATH = 'virgin.modem.stats'
     CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
+    OUTPUT = '3'
 
     def __init__(self):
         """
@@ -192,17 +193,23 @@ class SuperHub(object):
             t0 = time.time()
             data = SuperHub.__get_upstream_stats__() + SuperHub.__get_downstream_stats__() + SuperHub.__get_snr__()
             data_stream = '\n'.join(data) + '\n'
-            SuperHub.__carbon_send__(data_stream)
-            print "Sending data to CARBON..."
-            SuperHub.__write_csv__(data_stream)
-            print "Writing data to CSV..."
+            if SuperHub.OUTPUT == '3':
+                SuperHub.__carbon_send__(data_stream)
+                print "Sending data to CARBON..."
+                SuperHub.__write_csv__(data_stream)
+                print "Writing data to CSV..."
+            elif SuperHub.OUTPUT == '2':
+                SuperHub.__carbon_send__(data_stream)
+                print "Sending data to CARBON..."
+            elif SuperHub.OUTPUT == '1':
+                SuperHub.__write_csv__(data_stream)
+                print "Writing data to CSV..."
             t1 = time.time()
             time_taken = t1-t0
             time_sleep = SuperHub.INTERVAL - time_taken
             print "Data collection took %s" % time_taken
             print "Sleeping for %s...\n---\n\n" % time_sleep
             time.sleep(SuperHub.INTERVAL - time_taken)
-
 
 
 if __name__ == '__main__':

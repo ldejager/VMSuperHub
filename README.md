@@ -16,4 +16,10 @@ root@graphite:/opt/scripts/VMSuperHub# supervisorctl
 vmsuperhub                       RUNNING    pid 14914, uptime 0:00:12
 ```
 
+The output can be either sent to;
+
+- Carbon & CSV (Configuration value 3)
+- Carbon (Configuration value 2)
+- CSV (Configuration value 1)
+
 ![alt text](https://raw.githubusercontent.com/ldejager/VMSuperHub/master/VMSuperHub.png "VMSuperHub")
