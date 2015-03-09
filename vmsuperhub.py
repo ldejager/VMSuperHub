@@ -64,6 +64,13 @@ class SuperHub(object):
             power = power_table.findAll('td')
             power_levels = [power[1].text, power[2].text, power[3].text, power[4].text]
 
+            for idx, level in enumerate(power_levels):
+                if 'N/A' in level:
+                    level = '%.2f' % float(0.00)
+                    power_levels[idx] = level
+                else:
+                    power_levels[idx] = level
+
             power_data = []
 
             ts = int(time.time())
