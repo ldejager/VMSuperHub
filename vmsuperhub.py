@@ -25,6 +25,7 @@ class SuperHub(object):
     CARBON_PATH = 'virgin.modem.stats'
     CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
     OUTPUT = '3'
+    CONNECT_TIMEOUT = '10'
 
     def __init__(self):
         """
@@ -57,7 +58,8 @@ class SuperHub(object):
         """
 
         try:
-            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusUpstreamCfgCgi", timeout=10)
+            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusUpstreamCfgCgi",
+                                  timeout=self.CONNECT_TIMEOUT)
             parse = BeautifulSoup(url.read())
 
             power_label = parse.find(text="Power Level (dBmV)")
@@ -92,13 +94,15 @@ class SuperHub(object):
         """
 
         try:
-            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
+            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi",
+                                  timeout=self.CONNECT_TIMEOUT)
             parse = BeautifulSoup(url.read())
 
             power_label = parse.find(text="Power Level (dBmV)")
             power_table = power_label.parent.parent
             power = power_table.findAll('td')
-            power_levels = [power[1].text, power[2].text, power[3].text, power[4].text, power[5].text, power[6].text, power[7].text, power[8].text]
+            power_levels = [power[1].text, power[2].text, power[3].text, power[4].text, power[5].text, power[6].text,
+                            power[7].text, power[8].text]
 
             for idx, level in enumerate(power_levels):
                 if 'N/A' in level:
@@ -127,13 +131,15 @@ class SuperHub(object):
         """
 
         try:
-            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi")
+            url = urllib2.urlopen("http://" + self.__get_gateway__() + "/cgi-bin/VmRouterStatusDownstreamCfgCgi",
+                                  timeout=self.CONNECT_TIMEOUT)
             parse = BeautifulSoup(url.read())
 
             snr_label = parse.find(text="RxMER (dB)")
             snr_table = snr_label.parent.parent
             snr = snr_table.findAll('td')
-            snr_levels = [snr[1].text, snr[2].text, snr[3].text, snr[4].text, snr[5].text, snr[6].text, snr[7].text, snr[8].text]
+            snr_levels = [snr[1].text, snr[2].text, snr[3].text, snr[4].text, snr[5].text, snr[6].text, snr[7].text,
+                          snr[8].text]
 
             for idx, level in enumerate(snr_levels):
                 if 'N/A' in level:
