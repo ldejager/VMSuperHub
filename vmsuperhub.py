@@ -26,6 +26,7 @@ class SuperHub(object):
     CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
     OUTPUT = '3'
     CONNECT_TIMEOUT = '10'
+    DEFAULT_MODEM_IP = '192.168.100.1'
 
     def __init__(self):
         """
@@ -41,16 +42,22 @@ class SuperHub(object):
 
     def __get_gateway__(self):
         """
-        Get default gateway by reading /proc/net/route
+        Get gateway IP (modem/router) to grab stats.
+
+        In router mode read /proc/net/route, in modem mode use DEFAULT_MODEM_IP config value.
         """
 
-        with open("/proc/net/route") as fh:
-            for line in fh:
-                fields = line.strip().split()
-                if fields[1] != '00000000' or not int(fields[3], 16) & 2:
-                    continue
+        try:
+            urllib2.urlopen("http://" + self.DEFAULT_MODEM_IP + "/RouterStatus.html", timeout=1)
+            return self.DEFAULT_MODEM_IP
+        except urllib2.URLError:
+            with open("/proc/net/route") as fh:
+                for line in fh:
+                    fields = line.strip().split()
+                    if fields[1] != '00000000' or not int(fields[3], 16) & 2:
+                        continue
 
-                return socket.inet_ntoa(struct.pack("<L", int(fields[2], 16)))
+                    return socket.inet_ntoa(struct.pack("<L", int(fields[2], 16)))
 
     def __get_upstream_stats__(self):
         """
