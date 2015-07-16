@@ -25,7 +25,7 @@ class SuperHub(object):
     CARBON_PATH = 'virgin.modem.stats'
     CSV_FILE = os.path.dirname(os.path.abspath(__file__)) + '/vmstats.csv'
     OUTPUT = '3'
-    CONNECT_TIMEOUT = '10'
+    CONNECT_TIMEOUT = 10
     DEFAULT_MODEM_IP = '192.168.100.1'
 
     def __init__(self):
