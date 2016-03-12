@@ -20,4 +20,4 @@ RUN /usr/local/bin/echo_supervisord_conf > /etc/supervisord.conf \
 RUN ln -sf /dev/stdout /opt/scripts/VMSuperHub/vm_supervisor.out.log
 RUN ln -sf /dev/stderr /opt/scripts/VMSuperHub/vm_supervisor.err.log
 
-CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["supervisord", "-nc", "/etc/supervisord.conf"]
