@@ -1,5 +1,4 @@
-VMSuperHub Statistics
-=====================
+# VMSuperHub Statistics
 
 To get up and running, install the required additional modules through pip.
 
@@ -23,3 +22,9 @@ The output can be either sent to;
 - CSV (Configuration value 1)
 
 ![alt text](https://raw.githubusercontent.com/ldejager/VMSuperHub/master/VMSuperHub.png "VMSuperHub")
+
+## Docker Image
+
+Included is also a `Dockerfile` to build a docker image.
+
+The image is also available from `docker.io/ldejager/vmsuperhub`
